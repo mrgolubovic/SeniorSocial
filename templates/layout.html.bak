@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} | Senior Social</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <a href="{{ url_for('index') }}"><img src="/static/logo.png" width="150px"></a>
+        {% if 'username' in session %}
+            <div>
+                <a href="{{ url_for('index') }}">Home</a> |
+                <a href="{{ url_for('logout') }}">Logout</a> |
+                <a href="/my-profile">Welcome {{ session['username'] }}</a>    
+            </div>
+        {% else %}
+            <div>
+                <a href="{{ url_for('login') }}">Login</a> | 
+                <a href="{{ url_for('register') }}">Register</a>
+            </div>
+        {% endif %}
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Left Column -->
+         {% if 'username' in session %}
+        <div class="left-column">
+            <h3>Menu</h3>
+            <img src="/static/left-menu.png" alt="Error!" width="250px" usemap="#lm-map">
+            <map name="lm-map">
+                <area shape="rect" coords="9,55,120,165" href="/manage-friends" alt="Friends">
+                <area shape="rect" coords="130,55,241,165" href="/messages" alt="Messages">
+                <area shape="rect" coords="9,209,120,320" href="/games" alt="Games">
+                <area shape="rect" style="cursor: pointer;" coords="130,209,241,320" id="create-post-btn" alt="">
+            </map>
+        </div>
+        {% else %}
+        {% endif %}
+        <!-- Middle Column -->
+        <div class="middle-column">
+            {% block content %}{% endblock %}
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <h3>Sponsored</h3>
+            <p>Ad content goes here...</p>
+        </div>
+    </div>
+    <script>
+        // Get references to the button and the post box
+        
+        const createPostBtn = document.getElementById("create-post-btn");
+        const postBox = document.getElementById("post-box");
+        // Add click event listener to the button
+        postBox.style.display = "none";
+        createPostBtn.addEventListener("click", function () {
+            // Toggle the display property of the post box
+            if (postBox.style.display === "none") {
+                postBox.style.display = "block"; // Show the post box
+            } else {
+                postBox.style.display = "none"; // Hide the post box
+            }
+        });
+    </script>
+    
+</body>
+</html>

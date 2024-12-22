@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Home</h1>
+
+        <!-- Display Posts -->
+        <div class="posts-container">
+            {% for post in posts %}
+            {% if post.user_id != session['user_id'] %}
+                <div class="post">
+                    <div class="post-header">
+                        <a href="/profile?id={{ post.user_id }}">
+                            <h3>{{ post.username }}</h3>
+                        </a>
+                        <p>{{ post.created_at }}</p>
+                    </div>
+                    <p>{{ post.content }}</p>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

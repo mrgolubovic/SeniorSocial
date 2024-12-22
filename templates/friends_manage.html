@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block title %}Manage Friends{% endblock %}
+
+{% block content %}
+    <h1>Manage Friends</h1>
+
+    <!-- Add Friend Form -->
+    <section class="add-friend">
+        <h2>Add a New Friend</h2>
+        <form method="POST" action="{{ url_for('friend_management') }}">
+            <input type="text" name="username" placeholder="Enter username" required>
+            <button type="submit">Send Friend Request</button>
+        </form>
+    </section>
+
+    <!-- Friends List -->
+    <section class="friends-list">
+        <h2>Your Friends</h2>
+        {% if not friends %}
+            <p>You have no friends yet. Send some friend requests!</p>
+        {% else %}
+            <ul>
+                {% for friend in friends %}
+                    {% if friend.id == session['user_id'] %}
+                    {% else %}
+                        <li class="friend-item" style="list-style: none;">
+                            <a href="/profile?id={{ friend.id }}"><div class="friend-info" >
+                                {% if not friend.profile_photo %}
+                                <img src="/static/default-profile.png" alt="{{ friend.username }}'s Profile Photo" class="friend-photo" style="width: 150px;border-radius: 380px;">
+                                {% else %}
+                                <img src="data:image/jpeg;base64,{{ friend.profile_photo | b64encode }}" alt="{{ friend.username }}'s Profile Photo" class="friend-photo" style="width: 150px;border-radius: 380px;">
+                                {% endif %}
+                                <span class="friend-username">{{ friend.username }}</span>
+                            </div></a>
+                            <form method="POST" action="{{ url_for('remove_friend') }}">
+                                <input type="hidden" name="friend_id" value="{{ friend.id }}">
+                                <input type="hidden" name="unfriend" value="{{ friend.id }}">
+                                <button type="submit">Remove Friend</button>
+                            </form>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </section>
+
+    <hr>
+
+    <!-- Pending Friend Requests -->
+    <section class="pending-requests">
+        <h2>Pending Friend Requests</h2>
+        {% if not pending_requests %}
+            <p>No pending requests.</p>
+        {% else %}
+            <ul>
+                {% for request in pending_requests %}
+                    <li class="request-item">
+                        <div class="request-info">
+                            <span>{{ request.username }}</span>
+                        </div>
+                        <div class="request-actions">
+                            <form method="POST" action="{{ url_for('friend_management') }}">
+                                <button type="submit" name="accept_friend_request" value="{{ request.request_id }}">Accept</button>
+                            </form>
+                            <form method="POST" action="{{ url_for('friend_management') }}">
+                                <button type="submit" name="decline_friend_request" value="{{ request.request_id }}">Reject</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </section>
+{% endblock %}

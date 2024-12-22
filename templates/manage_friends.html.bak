@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block title %}Manage Friends{% endblock %}
+
+{% block content %}
+<h1>Manage Friends</h1>
+
+<h2>Friends</h2>
+<ul>
+    {% for friend in friends %}
+        <li>
+            {{ friend.username }}
+            <form action="/friend-action" method="post" style="display: inline;">
+                <input type="hidden" name="action" value="unfriend">
+                <input type="hidden" name="friend_id" value="{{ friend.id }}">
+                <button type="submit">Unfriend</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+
+<h2>Incoming Friend Requests</h2>
+<ul>
+    {% for request in incoming_requests %}
+        <li>
+            {{ request.username }}
+            <form action="/friend-action" method="post" style="display: inline;">
+                <input type="hidden" name="action" value="accept">
+                <input type="hidden" name="friend_id" value="{{ request.id }}">
+                <button type="submit">Accept</button>
+            </form>
+            <form action="/friend-action" method="post" style="display: inline;">
+                <input type="hidden" name="action" value="reject">
+                <input type="hidden" name="friend_id" value="{{ request.id }}">
+                <button type="submit">Reject</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+
+<h2>Outgoing Friend Requests</h2>
+<ul>
+    {% for request in outgoing_requests %}
+        <li>
+            {{ request.username }}
+            <form action="/friend-action" method="post" style="display: inline;">
+                <input type="hidden" name="action" value="cancel">
+                <input type="hidden" name="friend_id" value="{{ request.id }}">
+                <button type="submit">Cancel Request</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+{% if friend_request.status == 'pending' %}
+<form method="POST" action="{{ url_for('accept_friend_request', user_id=friend_request.user_id) }}">
+    <button type="submit">Accept</button>
+</form>
+<form method="POST" action="{{ url_for('reject_friend_request', user_id=friend_request.user_id) }}">
+    <button type="submit">Reject</button>
+</form>
+{% endif %}
+
+{% endblock %}

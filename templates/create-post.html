@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container">
+        <!-- Create Post form container -->
+        <div class="create-post-container">
+            <h2>Create Post</h2>
+            <form method="POST" action="{{ url_for('create_post') }}">
+                <textarea id="post-textarea" name="content" style="resize: none;width: 90%;" placeholder="What's on your mind?" required></textarea>
+                <button type="submit" id="submit-post-btn">Post</button>
+            </form>
+        </div>
+
+        <!-- Post Box -->
+        <div id="post-box" class="post-box" style="display: none;">
+            <p>Your post has been created!</p>
+            <div class="post-actions">
+                <button onclick="window.location.href='/my-profile'">Go to Profile</button>
+                <button onclick="window.location.href='/home'">Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const submitPostBtn = document.getElementById("submit-post-btn");
+        const postBox = document.getElementById("post-box");
+        
+        submitPostBtn.addEventListener("click", function () {
+            postBox.style.display = "block";  // Show the post box when the post is submitted
+        });
+    </script>
+{% endblock %}

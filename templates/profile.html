@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}{{ user.username }}'s Profile{% endblock %}
+{% block content %}
+<div class="profile">
+    <h2>{{ user.username }}'s Profile</h2>
+    {% if not user.profile_photo %}
+    <img src="/static/default-profile.png" style="width: 150px;border-radius: 380px;" alt="">
+    {% else %}
+    <img src="data:image/jpeg;base64,{{ user.profile_photo | b64encode }}" alt="{{ user.username }}'s Profile Photo" class="profile-photo" style="border-radius: 380px;width: 150px;">
+    {% endif %}
+    <h3>Friends</h3>
+    <ul style="list-style: none;">
+        {% for friend in friends %}
+        <a href="{{ url_for('profile', id=friend.id) }}">
+            <li>
+                {% if not friend.profile_photo %}
+                    <img style="width:75px;border-radius: 50%;" src="/static/default-profile.png" alt="">
+                {% else %}
+                    <img style="width:75px;border-radius: 50%;" src="data:image/jpeg;base64,{{ friend.profile_photo | b64encode }}" alt="">
+                {% endif %}
+            </li>
+            <li>{{ friend.username }}</li>
+        </a>
+        {% endfor %}
+    </ul>
+
+    <h3>Posts</h3>
+    <ul id="posts-list">
+        {% for post in posts %}
+            <li>
+                <p>{{ post.content }}</p>
+                <small>{{ post.created_at }}</small>
+                {% if post.user_id == session_id %}
+                        <form method="POST" action="{{ url_for('delete_post', post_id=post.id) }}">
+                            <button style="border: none;outline: none;background: none;cursor: pointer;" type="submit" class="delete-btn"><svg id="trashposticon" xmlns="http://www.w3.org/2000/svg" style="fill:#000;" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg></button>
+                        </form>
+                    {% else %}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

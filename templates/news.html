@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %}News{% endblock %}
+{% block content %}
+    <h1>News</h1>
+    <section class="news">
+        {% for article in articles %}
+            <article class="news-item">
+                <h2>{{ article['title'] }}</h2>
+                <p>By {{ article['author'] or 'Unknown' }} | {{ article['published_date'] }}</p>
+                {% if article['image_url'] %}
+                    <img src="{{ article['image_url'] }}" alt="News Image" width="35vw" class="news-image">
+                {% endif %}
+                <p>{{ article['content'][:250] }}...</p>
+                <a href="/article?id={{ article['id'] }}" target="_blank">Read More</a>
+            </article>
+        {% endfor %}
+    </section>
+{% endblock %}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} | Senior Social</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="shortcut icon" href="/static/ico.png" type="image/x-icon">
+    <style>
+        /* CSS for hidden content */
+        .hidden {
+            display: none;
+        }
+
+        #post-box {
+            display: none;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+            width: 50%;
+            background-color: #f9f9f9;
+        }
+
+        .create-post-btn {
+            cursor: pointer;
+            outline: 2px solid transparent;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <a href="{{ url_for('index') }}"><img src="/static/logo.png" width="150px"></a>
+        {% if 'username' in session %}
+            <div>
+                <a href="{{ url_for('index') }}">Home</a> |
+                <a href="{{ url_for('logout') }}">Logout</a> |
+                <a href="/my-profile">Welcome {{ session['username'] }}</a>
+            </div>
+        {% else %}
+            <div>
+                <a href="{{ url_for('login') }}">Login</a> |
+                <a href="{{ url_for('register') }}">Register</a>
+            </div>
+        {% endif %}
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Left Column -->
+        {% if 'username' in session %}
+        <div class="left-column">
+            <h3>Menu</h3>
+            <img src="/static/left-menu.png" alt="Menu" usemap="#lm-map">
+            <map name="lm-map">
+                <area shape="rect" coords="9,55,120,165" href="/friends" alt="Friends">
+                <area shape="rect" coords="130,55,241,165" href="/news" alt="Messages">
+                <area shape="rect" coords="9,209,120,320" href="/create-post" alt="Games">
+                <area shape="rect" coords="130,209,241,320"  alt="Create Post" href="/my-profile">
+            </map>
+        </div>
+        {% endif %}
+        <!-- Middle Column -->
+        <div class="middle-column">
+            {% block content %}{% endblock %}
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <h3>Sponsored</h3>
+            <p>Ad content goes here...</p>
+        </div>
+    </div>
+    <footer>
+        <div id="copyright"></div>
+    </footer>
+    <script>
+        window.addEventListener("load", () => {
+        const currentYear = new Date().getFullYear();
+        const copyright = document.getElementById("copyright");
+        copyright.innerHTML = `&copy; Copyright ${currentYear} - <a href="https://www.matthewgolubovic.com/">Matthew Golubovic</a>, All Rights Reserved`
+    });
+    </script>
+</body>
+</html>
