@@ -15,7 +15,7 @@ def b64encode_filter(data):
     return base64.b64encode(data).decode("utf-8")
 
 app.secret_key = """
-c5>btBWhG;vP,/f}ANmKn62w9][p~&g:a%#_yq4QD{Yk<('xzMAR~]EMw5)e8+6@39T:Hm"!f&<xNU,XSqD7y}LZGv2kd#=uQJ'zY`.Cpz%8:}u7'*LE]KFSyHb5r2Zw{cBhQVN=;v&-d+AT,qkWsmqg,um]>jr[`F_a6zketKQf+/<=B{s85!GT2wy^xUcX4$#b}n;J
+placeholder_text
 """  # Replace with a strong secret key
 
 def get_db_connection():
